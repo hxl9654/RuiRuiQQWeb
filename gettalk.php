@@ -16,7 +16,7 @@
 // * @copyright  Copyright (c) 2015 Xianglong He. (http://tec.hxlxz.com)
 // * @license    http://www.gnu.org/licenses/     GPL v3
 // * @version    1.0
-// * @discribe   SmartQQ语库添加词条
+// * @discribe   SmartQQ语库读取词条
 ?>
 <?php
 //解决变量未定义报错
@@ -31,68 +31,37 @@ error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
 //连接数据库
 require 'database.php';
 
-if($_REQUEST['password'] != $AdminPass)
-{
-    mysql_close($con);
-    exit("Wrong Password");
-}
-
 mysql_query("set character set 'utf8'");
 
-//写入回复语句并获取编号
-$sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]' ";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
-if($row == "")
-{
-    $sql = "INSERT INTO data (data) VALUES ('$_REQUEST[aim]')";
-    if (!mysql_query($sql, $con))
-    {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
-    }
-    $sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]' ";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);   
-}
-$aimno = _rowget('no', $row);
-//寻找是否存在原语句
+//读取语录数据库
 $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row != "")
 {
     $aim = _rowget('aim', $row);
-    $no = _rowget('no', $row);
     
     $str = explode(",",$aim);
-    for($i = 0; $i<count($str);$i ++)
-    {
-        if($str[$i] == $aimno)
-        {
-            mysql_close($con);
-            die('Already');
-        }
-    }
-    //向数据库添加数据
-    $sql = "update talk set aim = '$aim,$aimno' where no = $no";
-
-    if (!mysql_query($sql, $con))
-    {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
-    }
+    $aimno = $str[rand(0,count($str)-1)];
 }
 else
 {
-    $sql = "INSERT INTO talk (source, aim) VALUES ('$_REQUEST[source]', '$aimno')";
-    if (!mysql_query($sql, $con))
-    {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
-    }
+    mysql_close($con);
+    die('None1');
 }
-mysql_close($con);
-die('Success');
-
+//从回复数据库中读取语句
+$sql = "SELECT * FROM data WHERE no = '$aimno' ";
+$result = mysql_query($sql);
+$row = mysql_fetch_array($result);
+if($row != "")
+{
+    $response = _rowget('data', $row);   
+    mysql_close($con);
+    die($response);
+}
+else
+{
+    mysql_close($con);
+    die('None2');
+}
 ?>
