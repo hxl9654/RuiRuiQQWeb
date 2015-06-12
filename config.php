@@ -21,11 +21,11 @@
 <?php
 if (!defined('SMARTQQ_CONFIG'))
 {
-  define("SMARTQQ_CONFIG", "DEFINED");
-  define("DBServer", "localhost");
-  define("DBName", "smartqq");
-  define("DBUser", "smartqq");
-  define("DBPasswordd", "YUPsOBDwpze5Jec9G6fM");
-  $AdminPass="GXcxEDrqgEiGRAGCbBjF";
+    define("SMARTQQ_CONFIG", "DEFINED");
+    define("DBServer", "Your DataBase Server");
+    define("DBName", "Your DataBase Name");
+    define("DBUser", "Your DataBase UserName");
+    define("DBPasswordd", "Your DataBase UserPssword");
+    $AdminPass="Set Your AdminDataPassword 1";
 }
 ?>
