@@ -27,15 +27,20 @@ function _rowget($str,$row)
 }
 //屏蔽部分错误信息
 error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
-
-//连接数据库
-require 'database.php';
+require 'config.php';
 
 if($_REQUEST['password'] != $AdminPass)
 {
-    mysql_close($con);
     exit("Wrong Password");
 }
+
+if($OCSServer!="NONE")
+{
+    $connect = new Memcache; //声明一个新的memcached链接
+    $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
+}
+//连接数据库
+require 'database.php';
 
 mysql_query("set character set 'utf8'");
 
@@ -56,6 +61,8 @@ if($row == "")
     $row = mysql_fetch_array($result);   
 }
 $aimno = _rowget('no', $row);
+if($OCSServer!="NONE")
+    $connect->set('SmartQQRobotData1_'.$aimno,$_REQUEST[aim],0);
 //寻找是否存在原语句
 $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
 $result = mysql_query($sql);
@@ -76,7 +83,9 @@ if($row != "")
     }
     //向数据库添加数据
     $sql = "update talk set aim = '$aim,$aimno' where no = $no";
-
+    if($OCSServer!="NONE")
+        $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aim.','.$aimno,0);
+    
     if (!mysql_query($sql, $con))
     {
         mysql_close($con);
@@ -86,6 +95,8 @@ if($row != "")
 else
 {
     $sql = "INSERT INTO talk (source, aim) VALUES ('$_REQUEST[source]', '$aimno')";
+    if($OCSServer!="NONE")
+        $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aimno,0);
     if (!mysql_query($sql, $con))
     {
         mysql_close($con);

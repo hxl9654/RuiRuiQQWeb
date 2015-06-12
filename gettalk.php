@@ -28,26 +28,62 @@ function _rowget($str,$row)
 //屏蔽部分错误信息
 error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
 
+require 'config.php';
+
+//连接OCS缓存
+if($OCSServer!="NONE")
+{
+    $connect = new Memcache; //声明一个新的memcached链接
+    $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
+    
+    $aim = $connect->get('SmartQQRobotTalk1_'.$_REQUEST[source]);   
+    if($aim != "")
+    {
+        $str = explode(",",$aim);
+        $aimno = $str[rand(0,count($str)-1)];
+    }
+    if($aimno != "")
+    {
+        $result = $connect->get('SmartQQRobotData1_'.$aimno);
+        if($result != "")
+        {
+            die($result);
+        }
+    }
+}
 //连接数据库
 require 'database.php';
 
 mysql_query("set character set 'utf8'");
 
 //读取语录数据库
-$sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
-if($row != "")
+if($aim == "")
 {
-    $aim = _rowget('aim', $row);
-    
-    $str = explode(",",$aim);
-    $aimno = $str[rand(0,count($str)-1)];
+    $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+    $result = mysql_query($sql);
+    $row = mysql_fetch_array($result);
+    if($row != "")
+    {
+        $aim = _rowget('aim', $row);
+        $str = explode(",",$aim);
+        $aimno = $str[rand(0,count($str)-1)];
+        if($OCSServer!="NONE")
+            $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aim,0);
+    }
+    else
+    {
+        mysql_close($con);
+        die('None1');
+    }
 }
-else
+$str = explode(",",$aim);
+$aimno = $str[rand(0,count($str)-1)];
+if($OCSServer!="NONE")
+    $result =$connect->get('SmartQQRobotData1_'.$aimno);
+if($result != "")
 {
     mysql_close($con);
-    die('None1');
+    die($result);
 }
 //从回复数据库中读取语句
 $sql = "SELECT * FROM data WHERE no = '$aimno' ";
@@ -55,7 +91,9 @@ $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row != "")
 {
-    $response = _rowget('data', $row);   
+    $response = _rowget('data', $row); 
+    if($OCSServer!="NONE")
+        $connect->set('SmartQQRobotData1_'.$aimno,$response,0);
     mysql_close($con);
     die($response);
 }

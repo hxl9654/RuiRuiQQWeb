@@ -20,7 +20,6 @@
 //   太简单，不想注释
 ?>
 <?php
-require 'config.php';
 $con = mysql_connect(DBServer, DBUser, DBPasswordd);
 if (!$con)
     die('Could not connect: ' . mysql_error());
