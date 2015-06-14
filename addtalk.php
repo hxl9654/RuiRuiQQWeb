@@ -43,7 +43,19 @@ if($OCSServer!="NONE")
 require 'database.php';
 
 mysql_query("set character set 'utf8'");
-
+//获取提交的QQ号的信息
+$sql = "SELECT * FROM qqinf WHERE qq = '$_REQUEST[qqnum]' ";
+$result = mysql_query($sql);
+$row = mysql_fetch_array($result);
+if($row != "")
+{
+    $qqconf = $row['conf'];
+    if($qqconf == 2)
+    {
+        exit("IDDisabled");
+    }
+}
+else $qqconf = 0;
 //写入回复语句并获取编号
 $sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]' ";
 $result = mysql_query($sql);
@@ -64,6 +76,7 @@ $aimno = _rowget('no', $row);
 if($OCSServer!="NONE")
     $connect->set('SmartQQRobotData1_'.$aimno,$_REQUEST[aim],0);
 //寻找是否存在原语句
+$no = -1;
 $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
@@ -103,14 +116,57 @@ else
         die('Error: ' . mysql_error());
     }
 }
+//写入日志
 $sql = "INSERT INTO log (source, aim, qqnum) VALUES ('$_REQUEST[source]', '$_REQUEST[aim]', '$_REQUEST[qqnum]')";
 if (!mysql_query($sql, $con))
 {
     mysql_close($con);
     die('Error: ' . mysql_error());
 }
-
+//如果提交QQ号在白名单，自动通过审核
+if($qqconf == 1)
+{
+    if($no == -1)
+    {
+        $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+        $result = mysql_query($sql);
+        $row = mysql_fetch_array($result);   
+        $no = $row['no'];
+    }
+    else
+    {
+        $sql = "SELECT * FROM talk where no = $no ";
+        $result = mysql_query($sql);
+        $row = mysql_fetch_array($result);
+    }    
+    $aim1 = explode(",",$row['aim']);
+    $enable = explode(",",$row['enable']);
+    
+    $enable[count($aim1)-1] = 3;
+    $enablestr = $enable[0];
+    for($i=1; $i < count($aim1); $i++)
+    {
+        if($enable[$i] < 0 || $enable[$i] > 10)
+            $enable[$i] = 0;
+        $enablestr = $enablestr.",".$enable[$i];
+    }
+    $sql = "update talk set enable = '$enablestr' where no = $no";
+    if($OCSServer!="NONE")
+        $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
+    
+    if (!mysql_query($sql, $con))
+    {
+        mysql_close($con);
+        die('Error: ' . mysql_error());
+    }
+    else
+    {
+        mysql_close($con);
+        die('Success');
+    }
+}
+    
 mysql_close($con);
-die('Success');
+die('Waitting');
 
 ?>

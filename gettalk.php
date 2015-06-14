@@ -29,18 +29,70 @@ function _rowget($str,$row)
 error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
 
 require 'config.php';
-
+require 'database.php';
+$flag = 0;
+$flag1 = 0;
 //连接OCS缓存
 if($OCSServer!="NONE")
 {
     $connect = new Memcache; //声明一个新的memcached链接
     $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
     
-    $aim = $connect->get('SmartQQRobotTalk1_'.$_REQUEST[source]);   
+    $aim = $connect->get('SmartQQRobotTalk1_'.$_REQUEST[source]);
+
     if($aim != "")
     {
+        $SourceNo = $connect->get('SmartQQRobotTalk1SourceNo_'.$_REQUEST[source]);        
+        if($SourceNo == "")
+        {
+            $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+            $result = mysql_query($sql);
+            $row = mysql_fetch_array($result);
+            $SourceNo = _rowget('no', $row);
+            $connect->set('SmartQQRobotTalk1SourceNo_'.$_REQUEST[source],$SourceNo,0);
+        }
+       
+        $enable = $connect->get('SmartQQRobotTalk1Enable_'.$SourceNo);
+        if($enable == "")
+        {
+            if($row == "")
+            {
+                $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+                $result = mysql_query($sql);
+                $row = mysql_fetch_array($result);
+            }
+            $enable = _rowget('enable', $row);
+            $connect->set('SmartQQRobotTalk1Enable_'.$SourceNo,$enable,0);
+        }
+        
         $str = explode(",",$aim);
-        $aimno = $str[rand(0,count($str)-1)];
+        
+        $enable1 = explode(",",$enable);
+        for($i = 0; $i < count($enable1); $i++)
+        {
+            if($enable1[$i] == 1 || $enable1[$i] == 3)
+                $flag = 1;
+            if($enable1[$i] != 2)
+                $flag1 = 1;
+        }
+        if($flag == 1)
+        {
+            while(1)
+            {
+                $index = rand(0, count($str) - 1);
+                if(($enable1[$index] == 1 || $enable1[$index] == 3) && $index < count($enable1))
+                    break;
+            }
+
+            $aimno = $str[$index];
+        }
+        else 
+        {
+            mysql_close($con);
+            if($flag1 == 1)
+                die('None3');
+            else die('None4');
+        }
     }
     if($aimno != "")
     {
@@ -51,12 +103,10 @@ if($OCSServer!="NONE")
         }
     }
 }
-//连接数据库
-require 'database.php';
-
-mysql_query("set character set 'utf8'");
 
 //读取语录数据库
+$flag = 0;
+$flag1 = 0;
 if($aim == "")
 {
     $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
@@ -66,9 +116,34 @@ if($aim == "")
     {
         $aim = _rowget('aim', $row);
         $str = explode(",",$aim);
-        $aimno = $str[rand(0,count($str)-1)];
-        if($OCSServer!="NONE")
-            $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aim,0);
+        $enable1 = explode(",",_rowget('enable', $row));
+        for($i=0; $i < count($enable1); $i++)
+        {
+            if($enable1[$i] == 1 || $enable1[$i] == 3)
+                $flag = 1;
+            if($enable1[$i] != 2)
+                $flag1 = 1;
+        }
+        if($flag == 1)
+        {
+            while(1)
+            {
+                $index = rand(0, count($str) - 1);
+                if(($enable1[$index] == 1 || $enable1[$index] == 3) && $index < count($enable1))
+                    break;
+            }
+
+            $aimno = $str[$index];
+            if($OCSServer!="NONE")
+                $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aim,0);
+        }
+        else 
+        {
+            mysql_close($con);
+            if($flag1 == 1)
+                die('None3');
+            else die('None4');
+        }
     }
     else
     {

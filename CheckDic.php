@@ -53,7 +53,7 @@ while($row = mysql_fetch_array($result))
     $enable = explode(",",$row['enable']);
     for($i = count($aim) - 1; $i >= 0; $i--)
     {
-        if(count($enable) <= i || $enable[$i] == 0 || $enable[$i] == "")
+        if(count($enable) <= i || $enable[$i] == 0 || $enable[$i] == 3 || $enable[$i] == "")
         {
             $flag = 1;
             break;
@@ -61,27 +61,30 @@ while($row = mysql_fetch_array($result))
     }    
     if($flag == 1)break;
 } 
-echo "no :{$no}  <br> ".
-     "source: {$source} <br> ".
-     "aim: {$aim1} <br> ".
-     "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=deletesource&sourceno=$no' target='_blank'>删除整句</a> <br> ".
-     "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=allallow&sourceno=$no' target='_blank'>全部通过</a> <br> ".
-     "--------------------------------<br>";  
-for($i = count($aim) - 1; $i >= 0; $i--)
+if($flag == 1)
 {
-    if(count($enable) <= i || $enable[$i] == 0 || $enable[$i] == "")
+    echo "no :{$no}  <br> ".
+         "source: {$source} <br> ".
+         "aim: {$aim1} <br> ".
+         "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=deletesource&sourceno=$no' target='_blank'>删除整句</a> <br> ".
+         "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=allallow&sourceno=$no' target='_blank'>全部通过</a> <br> ".
+         "--------------------------------<br>";  
+    for($i = count($aim) - 1; $i >= 0; $i--)
     {
-        $sql = "SELECT * FROM data where no = $aim[$i]";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_array($result);
-        echo "data :{$row['data']}";
-        echo "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=allow&sourceno=$no&aimno=$i' target='_blank'>通过</a>";
-        echo "&nbsp;&nbsp;";
-        echo "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=disallow&sourceno=$no&aimno=$i' target='_blank'>屏蔽</a>";
-        echo "&nbsp;&nbsp;";
-        echo "<a href='#'>修改</a> <br> ";
-        $flag=1;
+        if(count($enable) <= i || $enable[$i] == 0 || $enable[$i] == 3 || $enable[$i] == "")
+        {
+            $sql = "SELECT * FROM data where no = $aim[$i]";
+            $result = mysql_query($sql);
+            $row = mysql_fetch_array($result);
+            echo "data :{$row['data']}";
+            echo "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=allow&sourceno=$no&aimno=$i' target='_blank'>通过</a>";
+            echo "&nbsp;&nbsp;";
+            echo "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=disallow&sourceno=$no&aimno=$i' target='_blank'>屏蔽</a>";
+            echo "&nbsp;&nbsp;";
+            echo "<a href='#'>修改</a> <br> ";
+            $flag=1;
+        }
     }
 }
-
+else echo "没有未审核的记录。";
 ?>
