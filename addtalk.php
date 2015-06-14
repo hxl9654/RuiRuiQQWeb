@@ -103,6 +103,13 @@ else
         die('Error: ' . mysql_error());
     }
 }
+$sql = "INSERT INTO log (source, aim, qqnum) VALUES ('$_REQUEST[source]', '$_REQUEST[aim]', '$_REQUEST[qqnum]')";
+if (!mysql_query($sql, $con))
+{
+    mysql_close($con);
+    die('Error: ' . mysql_error());
+}
+
 mysql_close($con);
 die('Success');
 
