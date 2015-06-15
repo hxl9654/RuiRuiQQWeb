@@ -116,8 +116,16 @@ else
         die('Error: ' . mysql_error());
     }
 }
+
+if($no == -1)
+{
+    $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+    $result = mysql_query($sql);
+    $row = mysql_fetch_array($result);   
+    $no = $row['no'];
+}
 //写入日志
-$sql = "INSERT INTO log (source, aim, qqnum) VALUES ('$_REQUEST[source]', '$_REQUEST[aim]', '$_REQUEST[qqnum]')";
+$sql = "INSERT INTO log (source, aim, qqnum, sourceno, aimno) VALUES ('$_REQUEST[source]', '$_REQUEST[aim]', '$_REQUEST[qqnum]', '$no', '$aimno')";
 if (!mysql_query($sql, $con))
 {
     mysql_close($con);
@@ -126,19 +134,9 @@ if (!mysql_query($sql, $con))
 //如果提交QQ号在白名单，自动通过审核
 if($qqconf == 1)
 {
-    if($no == -1)
-    {
-        $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_array($result);   
-        $no = $row['no'];
-    }
-    else
-    {
-        $sql = "SELECT * FROM talk where no = $no ";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_array($result);
-    }    
+    $sql = "SELECT * FROM talk where no = $no ";
+    $result = mysql_query($sql);
+    $row = mysql_fetch_array($result);
     $aim1 = explode(",",$row['aim']);
     $enable = explode(",",$row['enable']);
     
