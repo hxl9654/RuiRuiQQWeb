@@ -49,13 +49,29 @@ $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row != "")
 {
-    $qqconf = $row['conf'];
+    $qqconf = $row['conf'];   
     if($qqconf == 2)
     {
+        mysql_close($con);
         exit("IDDisabled");
     }
 }
 else $qqconf = 0;
+if($_REQUEST[superstudy]=="true")
+{
+    if($row == "")
+    {
+        mysql_close($con);
+        exit("NotSuper");
+    }  
+    $qqsuper = $row['super'];
+    if($qqsuper != 1)
+    {
+        mysql_close($con);
+        exit("NotSuper");
+    }
+}
+
 //写入回复语句并获取编号
 $sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]' ";
 $result = mysql_query($sql);
@@ -83,15 +99,20 @@ $row = mysql_fetch_array($result);
 if($row != "")
 {
     $aim = _rowget('aim', $row);
-    $no = _rowget('no', $row);
-    
+    $no = _rowget('no', $row);    
     $str = explode(",",$aim);
+    $enable = explode(",",$row['enable']);
+    
     for($i = 0; $i<count($str);$i ++)
     {
         if($str[$i] == $aimno)
         {
             mysql_close($con);
-            die('Already');
+            if($enable[$i]==1||$enable[$i]==3)
+                die('Already');
+            else if($enable[$i]==2)
+                die('Forbidden');
+            else die('Waitting');
         }
     }
     //向数据库添加数据
