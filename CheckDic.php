@@ -66,7 +66,7 @@ if($flag == 1)
     echo "no :{$no}  <br> ".
          "source: {$source} <br> ".
          "aim: {$aim1} <br> ".
-         "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=deletesource&sourceno=$no' target='_blank'>删除整句</a> <br> ".
+         "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=deletesource&sourceno=$no&source=$source' target='_blank'>删除整句</a> <br> ".
          "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=allallow&sourceno=$no' target='_blank'>全部通过</a> <br> ".
          "--------------------------------<br>";  
     for($i = count($aim) - 1; $i >= 0; $i--)

@@ -105,7 +105,7 @@ else if($_REQUEST['action']=="deletesource")
     $sql = "DELETE FROM talk WHERE no = $_REQUEST[sourceno]";
     $result = mysql_query($sql);
     if($OCSServer!="NONE")
-        $connect->delete('SmartQQRobotTalk1_'.$_REQUEST[sourceno]);
+        $connect->delete('SmartQQRobotTalk1_'.$_REQUEST[source]);
 }
 else if($_REQUEST['action']=="allallow")
 {
