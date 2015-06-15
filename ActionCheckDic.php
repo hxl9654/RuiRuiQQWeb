@@ -119,7 +119,7 @@ else if($_REQUEST['action']=="allallow")
         $enablestr = 1;
     for($i=1; $i < count($aim); $i++)
     {
-        if($i >= count($aim) || $enable[$i] == 0)
+        if($i >= count($aim) || $enable[$i] == 0|| $enable[$i] == 3)
             $enable[$i] = 1;
         $enablestr = $enablestr.",".$enable[$i];
     }
