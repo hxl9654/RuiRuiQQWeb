@@ -44,7 +44,7 @@ require 'database.php';
 
 mysql_query("set character set 'utf8'");
 //获取提交的QQ号的信息
-$sql = "SELECT * FROM qqinf WHERE qq = '$_REQUEST[qqnum]' ";
+$sql = "SELECT * FROM qqinf WHERE qq = '$_REQUEST[qqnum]' limit 1";
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row != "")
@@ -73,7 +73,7 @@ if($_REQUEST[superstudy]=="true")
 }
 
 //写入回复语句并获取编号
-$sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]' ";
+$sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]'  limit 1";
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row == "")
@@ -84,7 +84,7 @@ if($row == "")
         mysql_close($con);
         die('Error: ' . mysql_error());
     }
-    $sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]' ";
+    $sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]'  limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);   
 }
@@ -93,7 +93,7 @@ if($OCSServer!="NONE")
     $connect->set('SmartQQRobotData1_'.$aimno,$_REQUEST[aim],0);
 //寻找是否存在原语句
 $no = -1;
-$sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+$sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]'  limit 1";
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row != "")
@@ -140,7 +140,7 @@ else
 
 if($no == -1)
 {
-    $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+    $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);   
     $no = $row['no'];

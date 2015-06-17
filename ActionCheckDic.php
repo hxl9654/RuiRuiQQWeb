@@ -45,7 +45,7 @@ require 'database.php';
 mysql_query("set character set 'utf8'");
 if($_REQUEST['action']=="allow")
 {
-    $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] ";
+    $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     $enable = explode(",",$row['enable']);
@@ -73,7 +73,7 @@ if($_REQUEST['action']=="allow")
 }
 else if($_REQUEST['action']=="disallow")
 {
-    $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] ";
+    $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     $enable = explode(",",$row['enable']);
@@ -109,7 +109,7 @@ else if($_REQUEST['action']=="deletesource")
 }
 else if($_REQUEST['action']=="allallow")
 {
-    $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] ";
+    $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     $enable = explode(",",$row['enable']);

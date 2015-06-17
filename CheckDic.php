@@ -73,7 +73,7 @@ if($flag == 1)
     {
         if(count($enable) <= i || $enable[$i] == 0 || $enable[$i] == 3 || $enable[$i] == "")
         {
-            $sql = "SELECT * FROM data where no = $aim[$i]";
+            $sql = "SELECT * FROM data where no = $aim[$i] limit 1";
             $result = mysql_query($sql);
             $row = mysql_fetch_array($result);
             echo "data :{$row['data']}";

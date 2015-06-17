@@ -45,7 +45,7 @@ if($OCSServer!="NONE")
         $SourceNo = $connect->get('SmartQQRobotTalk1SourceNo_'.$_REQUEST[source]);        
         if($SourceNo == "")
         {
-            $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+            $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
             $result = mysql_query($sql);
             $row = mysql_fetch_array($result);
             $SourceNo = _rowget('no', $row);
@@ -57,7 +57,7 @@ if($OCSServer!="NONE")
         {
             if($row == "")
             {
-                $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+                $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
                 $result = mysql_query($sql);
                 $row = mysql_fetch_array($result);
             }
@@ -109,7 +109,7 @@ $flag = 0;
 $flag1 = 0;
 if($aim == "")
 {
-    $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' ";
+    $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     if($row != "")
@@ -161,7 +161,7 @@ if($result != "")
     die($result);
 }
 //从回复数据库中读取语句
-$sql = "SELECT * FROM data WHERE no = '$aimno' ";
+$sql = "SELECT * FROM data WHERE no = '$aimno' limit 1";
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row != "")
