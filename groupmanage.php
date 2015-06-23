@@ -49,17 +49,20 @@ if($_REQUEST['action']=="set")
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     if($row == "")   
-    {
-        $sql = "INSERT INTO groupmanage (gno, '$_REQUEST[option]') VALUES ('$_REQUEST[gno]', '$_REQUEST[value]')";
-        $result = mysql_query($sql);
+    {   
+        $sql = "INSERT INTO groupmanage (gno, $_REQUEST[option]) VALUES ('$_REQUEST[gno]', '$_REQUEST[value]')";
+        mysql_query($sql);
         mysql_close($con);
     }
     else
     {
-        $sql = "UPDATE groupmanage set '$_REQUEST[option]' = '$_REQUEST[value]' WHERE gno = '$_REQUEST[gno]'";
-        $result = mysql_query($sql);
+        $sql = "UPDATE groupmanage set $_REQUEST[option] = '$_REQUEST[value]' WHERE gno = '$_REQUEST[gno]'";
+        mysql_query($sql);
         mysql_close($con);
     }
+    echo "{";
+    echo "\"statu\":\"success\"";
+    echo "}"; 
 }
 else if($_REQUEST['action']=="get")
 {
@@ -69,9 +72,25 @@ else if($_REQUEST['action']=="get")
     if($row != "")   
     {
         echo "{";
-        echo "\"enable\":\"".$row['enable']."\"";
+        echo "\"enable\":\"".$row['enable']."\",";
+        echo "\"gno\":\"".$row['gno']."\",";
+        echo "\"statu\":\"success\"";
         echo "}";
         mysql_close($con);
     }
+    else
+    {
+        echo "{";
+        echo "\"statu\":\"fail\",";
+        echo "\"error\":\"nodata\"";
+        echo "}";   
+    }
+}
+else
+{
+    echo "{";
+    echo "\"statu\":\"fail\",";
+    echo "\"error\":\"notsupport\"";
+    echo "}"; 
 }
 ?>
