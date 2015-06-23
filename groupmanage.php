@@ -33,12 +33,6 @@ if($_REQUEST['password'] != $AdminPass)
 {
     exit("Wrong Password");
 }
-//连接OCS缓存
-if($OCSServer!="NONE")
-{
-    $connect = new Memcache; //声明一个新的memcached链接
-    $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
-}
 //连接数据库
 require 'database.php';
 
