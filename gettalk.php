@@ -38,21 +38,21 @@ if($OCSServer!="NONE")
     $connect = new Memcache; //声明一个新的memcached链接
     $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
     
-    $aim = $connect->get('SmartQQRobotTalk1_'.$_REQUEST[source]);
+    $aim = $connect->get('SmartQQRobotTalk2_'.$_REQUEST[source]);
 
     if($aim != "")
     {
-        $SourceNo = $connect->get('SmartQQRobotTalk1SourceNo_'.$_REQUEST[source]);        
+        $SourceNo = $connect->get('SmartQQRobotTalk2SourceNo_'.$_REQUEST[source]);        
         if($SourceNo == "")
         {
             $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
             $result = mysql_query($sql);
             $row = mysql_fetch_array($result);
             $SourceNo = _rowget('no', $row);
-            $connect->set('SmartQQRobotTalk1SourceNo_'.$_REQUEST[source],$SourceNo,0);
+            $connect->set('SmartQQRobotTalk2SourceNo_'.$_REQUEST[source],$SourceNo,0);
         }
        
-        $enable = $connect->get('SmartQQRobotTalk1Enable_'.$SourceNo);
+        $enable = $connect->get('SmartQQRobotTalk2Enable_'.$SourceNo);
         if($enable == "")
         {
             if($row == "")
@@ -62,7 +62,7 @@ if($OCSServer!="NONE")
                 $row = mysql_fetch_array($result);
             }
             $enable = _rowget('enable', $row);
-            $connect->set('SmartQQRobotTalk1Enable_'.$SourceNo,$enable,0);
+            $connect->set('SmartQQRobotTalk2Enable_'.$SourceNo,$enable,0);
         }
         
         $str = explode(",",$aim);
@@ -96,7 +96,7 @@ if($OCSServer!="NONE")
     }
     if($aimno != "")
     {
-        $result = $connect->get('SmartQQRobotData1_'.$aimno);
+        $result = $connect->get('SmartQQRobotData2_'.$aimno);
         if($result != "")
         {
             die($result);
@@ -135,7 +135,7 @@ if($aim == "")
 
             $aimno = $str[$index];
             if($OCSServer!="NONE")
-                $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aim,0);
+                $connect->set('SmartQQRobotTalk2_'.$_REQUEST[source],$aim,0);
         }
         else 
         {
@@ -154,7 +154,7 @@ if($aim == "")
 $str = explode(",",$aim);
 $aimno = $str[rand(0,count($str)-1)];
 if($OCSServer!="NONE")
-    $result =$connect->get('SmartQQRobotData1_'.$aimno);
+    $result =$connect->get('SmartQQRobotData2_'.$aimno);
 if($result != "")
 {
     mysql_close($con);
@@ -168,7 +168,7 @@ if($row != "")
 {
     $response = _rowget('data', $row); 
     if($OCSServer!="NONE")
-        $connect->set('SmartQQRobotData1_'.$aimno,$response,0);
+        $connect->set('SmartQQRobotData2_'.$aimno,$response,0);
     mysql_close($con);
     die($response);
 }

@@ -63,7 +63,7 @@ if($_REQUEST['action']=="allow")
     }
     $sql = "update talk set enable = '$enablestr' where no = $_REQUEST[sourceno]";
     if($OCSServer!="NONE")
-        $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
+        $connect->set('SmartQQRobotTalk2Enable_'.$_REQUEST[sourceno],$enablestr,0);
     
     if (!mysql_query($sql, $con))
     {
@@ -92,7 +92,7 @@ else if($_REQUEST['action']=="disallow")
     
     $sql = "update talk set enable = '$enablestr' where no = $_REQUEST[sourceno]";
     if($OCSServer!="NONE")
-        $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
+        $connect->set('SmartQQRobotTalk2Enable_'.$_REQUEST[sourceno],$enablestr,0);
     
     if (!mysql_query($sql, $con))
     {
@@ -105,7 +105,7 @@ else if($_REQUEST['action']=="deletesource")
     $sql = "DELETE FROM talk WHERE no = $_REQUEST[sourceno]";
     $result = mysql_query($sql);
     if($OCSServer!="NONE")
-        $connect->delete('SmartQQRobotTalk1_'.$_REQUEST[source]);
+        $connect->delete('SmartQQRobotTalk2_'.$_REQUEST[source]);
 }
 else if($_REQUEST['action']=="allallow")
 {
@@ -125,7 +125,7 @@ else if($_REQUEST['action']=="allallow")
     }
     $sql = "update talk set enable = '$enablestr' where no = $_REQUEST[sourceno]";
     if($OCSServer!="NONE")
-        $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
+        $connect->set('SmartQQRobotTalk2Enable_'.$_REQUEST[sourceno],$enablestr,0);
     
     if (!mysql_query($sql, $con))
     {
