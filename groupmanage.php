@@ -67,6 +67,12 @@ else if($_REQUEST['action']=="get")
     {
         echo "{";
         echo "\"enable\":\"".$row['enable']."\",";
+        echo "\"enableWeather\":\"".$row['enableWeather']."\",";
+        echo "\"enableExchangeRate\":\"".$row['enableExchangeRate']."\",";
+        echo "\"enableStock\":\"".$row['enableStock']."\",";
+        echo "\"enableStudy\":\"".$row['enableStudy']."\",";
+        echo "\"enabletalk\":\"".$row['enabletalk']."\",";
+        echo "\"enablexhj\":\"".$row['enablexhj']."\",";
         echo "\"gno\":\"".$row['gno']."\",";
         echo "\"statu\":\"success\"";
         echo "}";
