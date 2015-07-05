@@ -73,6 +73,7 @@ else if($_REQUEST['action']=="get")
         echo "\"enableStudy\":\"".$row['enableStudy']."\",";
         echo "\"enabletalk\":\"".$row['enabletalk']."\",";
         echo "\"enablexhj\":\"".$row['enablexhj']."\",";
+        echo "\"enableemoje\":\"".$row['enableemoje']."\",";
         echo "\"gno\":\"".$row['gno']."\",";
         echo "\"statu\":\"success\"";
         echo "}";
@@ -81,6 +82,7 @@ else if($_REQUEST['action']=="get")
     else
     {
         echo "{";
+        echo "\"gno\":\"$_REQUEST[gno]\",";
         echo "\"statu\":\"fail\",";
         echo "\"error\":\"nodata\"";
         echo "}";   
@@ -89,6 +91,7 @@ else if($_REQUEST['action']=="get")
 else
 {
     echo "{";
+    echo "\"gno\":\"$_REQUEST[gno]\",";
     echo "\"statu\":\"fail\",";
     echo "\"error\":\"notsupport\"";
     echo "}"; 
