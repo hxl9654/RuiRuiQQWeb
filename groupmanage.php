@@ -29,16 +29,17 @@ function _rowget($str,$row)
 error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
 
 require 'config.php';
-if($_REQUEST['password'] != $AdminPass)
-{
-    exit("Wrong Password");
-}
+
 //连接数据库
 require 'database.php';
 
 mysql_query("set character set 'utf8'");
 if($_REQUEST['action']=="set")
 {
+    if($_REQUEST['password'] != $AdminPass)
+    {
+        exit("Wrong Password");
+    }
     $sql = "SELECT * FROM groupmanage WHERE gno = '$_REQUEST[gno]'  limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
