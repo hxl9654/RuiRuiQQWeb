@@ -61,7 +61,7 @@ if($_REQUEST['action']=="set")
 }
 else if($_REQUEST['action']=="get")
 {
-    $sql = "SELECT * FROM groupmanage WHERE gno = '$_REQUEST[gno]'  limit 1";
+    $sql = "SELECT * FROM groupmanage WHERE gno = '".mysql_real_escape_string($_REQUEST[gno])."'  limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     if($row != "")   
