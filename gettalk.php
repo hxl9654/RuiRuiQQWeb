@@ -38,7 +38,7 @@ if($OCSServer!="NONE")
     $connect = new Memcache; //声明一个新的memcached链接
     $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
     
-    $aim = $connect->get('SmartQQRobotTalk1_'.mysql_real_escape_string($_REQUEST[source]));
+    $aim = $connect->get('SmartQQRobotTalk1_'.$_REQUEST[source]);
 
     if($aim != "")
     {
