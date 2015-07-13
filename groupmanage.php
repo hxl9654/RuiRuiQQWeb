@@ -75,6 +75,7 @@ else if($_REQUEST['action']=="get")
         echo "\"enabletalk\":\"".$row['enabletalk']."\",";
         echo "\"enablexhj\":\"".$row['enablexhj']."\",";
         echo "\"enableemoje\":\"".$row['enableemoje']."\",";
+        echo "\"enableCityInfo\":\"".$row['enableCityInfo']."\",";
         echo "\"gno\":\"".$row['gno']."\",";
         echo "\"statu\":\"success\"";
         echo "}";
