@@ -26,6 +26,9 @@ if (!defined('SMARTQQ_CONFIG'))
     define("DBName", "Your DataBase Name");
     define("DBUser", "Your DataBase UserName");
     define("DBPasswordd", "Your DataBase UserPssword");
+    define("WeatherAPIID", "Your Weather API ID");
+    define("WeatherAPIKey", "Your Weather API Key");
     $AdminPass="Set Your AdminDataPassword 1";
+    $OCSServer="Your ALiYun OCS Address";
 }
 ?>
