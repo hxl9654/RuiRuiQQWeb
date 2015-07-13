@@ -71,7 +71,7 @@ if($_REQUEST[superstudy]=="true")
         exit("NotSuper");
     }
 }
-
+$WaittingFlag = 0;
 //写入回复语句并获取编号
 $sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]'  limit 1";
 $result = mysql_query($sql);
@@ -107,23 +107,36 @@ if($row != "")
     {
         if($str[$i] == $aimno)
         {
-            mysql_close($con);
-            if($enable[$i]==1||$enable[$i]==3)
+            
+            if($enable[$i] == 1 || $enable[$i] == 3)
+            {
+                mysql_close($con);
                 die('Already');
-            else if($enable[$i]==2)
+            }
+            else if($enable[$i] == 2)
+            {
+                mysql_close($con);
                 die('Forbidden');
-            else die('Waitting');
+            }
+            else 
+            {
+                $WaittingFlag = 1;
+                $WaittingIndex = $i;
+            }
         }
     }
-    //向数据库添加数据
-    $sql = "update talk set aim = '$aim,$aimno' where no = $no";
-    if($OCSServer!="NONE")
-        $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aim.','.$aimno,0);
-    
-    if (!mysql_query($sql, $con))
+    if($WaittingFlag == 0)
     {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
+        //向数据库添加数据
+        $sql = "update talk set aim = '$aim,$aimno' where no = $no";
+        if($OCSServer!="NONE")
+            $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aim.','.$aimno,0);
+
+        if (!mysql_query($sql, $con))
+        {
+            mysql_close($con);
+            die('Error: ' . mysql_error());
+        }
     }
 }
 else
@@ -161,13 +174,17 @@ if($qqconf == 1)
     $aim1 = explode(",",$row['aim']);
     $enable = explode(",",$row['enable']);
     
-    $enable[count($aim1)-1] = 3;
+    if($WaittingFlag == 0)
+        $enable[count($aim1)-1] = 3;
+    else
+        $enable[$WaittingIndex] = 3;    
+    
     $enablestr = $enable[0];
     for($i=1; $i < count($aim1); $i++)
     {
         if($enable[$i] < 0 || $enable[$i] > 10)
             $enable[$i] = 0;
-        $enablestr = $enablestr.",".$enable[$i];
+        $enablestr = $enablestr.",".$enable[$i];      
     }
     $sql = "update talk set enable = '$enablestr' where no = $no";
     if($OCSServer!="NONE")
