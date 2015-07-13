@@ -30,8 +30,12 @@ if($areaid == '')
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     $areaid = _rowget('id', $row);
+    if($areaid == '')
+    {
+        die("NoCity");
+    }
     if($flag == 0)
-        $connect->set('SmartQQRobotWeatherCityID_' . $_REQUEST[city],$areaid,0);
+        $connect->set('SmartQQRobotWeatherCityID_' . $_REQUEST[city], $areaid, 0);
 }
 
 $date = date("YmdHi");
