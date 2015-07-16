@@ -29,16 +29,17 @@ function _rowget($str,$row)
 error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
 
 require 'config.php';
-if($_REQUEST['password'] != $AdminPass)
-{
-    exit("Wrong Password");
-}
+
 //连接数据库
 require 'database.php';
 
 mysql_query("set character set 'utf8'");
 if($_REQUEST['action']=="set")
 {
+    if($_REQUEST['password'] != $AdminPass)
+    {
+        exit("Wrong Password");
+    }
     $sql = "SELECT * FROM groupmanage WHERE gno = '$_REQUEST[gno]'  limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
@@ -60,7 +61,7 @@ if($_REQUEST['action']=="set")
 }
 else if($_REQUEST['action']=="get")
 {
-    $sql = "SELECT * FROM groupmanage WHERE gno = '$_REQUEST[gno]'  limit 1";
+    $sql = "SELECT * FROM groupmanage WHERE gno = '".mysql_real_escape_string($_REQUEST[gno])."'  limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     if($row != "")   
@@ -73,6 +74,9 @@ else if($_REQUEST['action']=="get")
         echo "\"enableStudy\":\"".$row['enableStudy']."\",";
         echo "\"enabletalk\":\"".$row['enabletalk']."\",";
         echo "\"enablexhj\":\"".$row['enablexhj']."\",";
+        echo "\"enableemoje\":\"".$row['enableemoje']."\",";
+        echo "\"enableCityInfo\":\"".$row['enableCityInfo']."\",";
+        echo "\"enableWiki\":\"".$row['enableWiki']."\",";
         echo "\"gno\":\"".$row['gno']."\",";
         echo "\"statu\":\"success\"";
         echo "}";
@@ -81,6 +85,7 @@ else if($_REQUEST['action']=="get")
     else
     {
         echo "{";
+        echo "\"gno\":\"$_REQUEST[gno]\",";
         echo "\"statu\":\"fail\",";
         echo "\"error\":\"nodata\"";
         echo "}";   
@@ -89,6 +94,7 @@ else if($_REQUEST['action']=="get")
 else
 {
     echo "{";
+    echo "\"gno\":\"$_REQUEST[gno]\",";
     echo "\"statu\":\"fail\",";
     echo "\"error\":\"notsupport\"";
     echo "}"; 

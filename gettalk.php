@@ -45,7 +45,7 @@ if($OCSServer!="NONE")
         $SourceNo = $connect->get('SmartQQRobotTalk2SourceNo_'.$_REQUEST[source]);        
         if($SourceNo == "")
         {
-            $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
+            $sql = "SELECT * FROM talk WHERE source = '".mysql_real_escape_string($_REQUEST[source])."' limit 1";
             $result = mysql_query($sql);
             $row = mysql_fetch_array($result);
             $SourceNo = _rowget('no', $row);
@@ -57,7 +57,7 @@ if($OCSServer!="NONE")
         {
             if($row == "")
             {
-                $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
+                $sql = "SELECT * FROM talk WHERE source = '".mysql_real_escape_string($_REQUEST[source])."' limit 1";
                 $result = mysql_query($sql);
                 $row = mysql_fetch_array($result);
             }
@@ -109,7 +109,7 @@ $flag = 0;
 $flag1 = 0;
 if($aim == "")
 {
-    $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
+    $sql = "SELECT * FROM talk WHERE source = '".mysql_real_escape_string($_REQUEST[source])."' limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     if($row != "")
