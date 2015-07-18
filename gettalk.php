@@ -32,24 +32,25 @@ require 'config.php';
 require 'database.php';
 $flag = 0;
 $flag1 = 0;
+$sourcesql = mysql_real_escape_string($_REQUEST[source]);
 //连接OCS缓存
 if($OCSServer!="NONE")
 {
     $connect = new Memcache; //声明一个新的memcached链接
     $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
     
-    $aim = $connect->get('SmartQQRobotTalk2_'.$_REQUEST[source]);
+    $aim = $connect->get('SmartQQRobotTalk2_'.$sourcesql);
 
     if($aim != "")
     {
-        $SourceNo = $connect->get('SmartQQRobotTalk2SourceNo_'.$_REQUEST[source]);        
+        $SourceNo = $connect->get('SmartQQRobotTalk2SourceNo_'.$sourcesql);        
         if($SourceNo == "")
         {
-            $sql = "SELECT * FROM talk WHERE source = '".mysql_real_escape_string($_REQUEST[source])."' limit 1";
+            $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
             $result = mysql_query($sql);
             $row = mysql_fetch_array($result);
             $SourceNo = _rowget('no', $row);
-            $connect->set('SmartQQRobotTalk2SourceNo_'.$_REQUEST[source],$SourceNo,0);
+            $connect->set('SmartQQRobotTalk2SourceNo_'.$sourcesql,$SourceNo,0);
         }
        
         $enable = $connect->get('SmartQQRobotTalk2Enable_'.$SourceNo);
@@ -57,7 +58,7 @@ if($OCSServer!="NONE")
         {
             if($row == "")
             {
-                $sql = "SELECT * FROM talk WHERE source = '".mysql_real_escape_string($_REQUEST[source])."' limit 1";
+                $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
                 $result = mysql_query($sql);
                 $row = mysql_fetch_array($result);
             }
@@ -109,7 +110,7 @@ $flag = 0;
 $flag1 = 0;
 if($aim == "")
 {
-    $sql = "SELECT * FROM talk WHERE source = '".mysql_real_escape_string($_REQUEST[source])."' limit 1";
+    $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);
     if($row != "")
@@ -135,7 +136,7 @@ if($aim == "")
 
             $aimno = $str[$index];
             if($OCSServer!="NONE")
-                $connect->set('SmartQQRobotTalk2_'.$_REQUEST[source],$aim,0);
+                $connect->set('SmartQQRobotTalk2_'.$sourcesql,$aim,0);
         }
         else 
         {
