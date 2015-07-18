@@ -51,7 +51,7 @@ else
     mysql_query($sql);
 }
 //按群号做记录
-if($_REQUEST[qqnum] != "NULL")
+if($_REQUEST[qunnum] != "NULL")
 {
     $sql = "SELECT * FROM logquncount WHERE qunnum = '$_REQUEST[qunnum]'  limit 1";
     $result = mysql_query($sql);

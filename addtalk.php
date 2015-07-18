@@ -160,11 +160,44 @@ if($no == -1)
     $no = $row['no'];
 }
 //写入日志
-$sql = "INSERT INTO log (source, aim, qqnum, sourceno, aimno) VALUES ('$sourcesql', '$aimsql', '$_REQUEST[qqnum]', '$no', '$aimno')";
+$sql = "INSERT INTO logstudy (source, aim, qqnum, qunnum, sourceno, aimno) VALUES ('$sourcesql', '$aimsql', '$_REQUEST[qqnum]', '$_REQUEST[qunnum]', '$no', '$aimno')";
 if (!mysql_query($sql, $con))
 {
     mysql_close($con);
     die('Error: ' . mysql_error());
+}
+//按QQ号做记录
+$sql = "SELECT * FROM logqqcount WHERE qqnum = '$_REQUEST[qqnum]'  limit 1";
+$result = mysql_query($sql);
+$row = mysql_fetch_array($result);
+if($row == "")   
+{   
+    $sql = "INSERT INTO logqqcount (qqnum, study) VALUES ('$_REQUEST[qqnum]', 1)";
+    mysql_query($sql);
+}
+else
+{
+    $temp = $row[study] + 1;
+    $sql = "UPDATE logqqcount set study = $temp WHERE qqnum = '$_REQUEST[qqnum]'";
+    mysql_query($sql);
+}
+//按群号做记录
+if($_REQUEST[qunnum] != "NULL")
+{
+    $sql = "SELECT * FROM logquncount WHERE qunnum = '$_REQUEST[qunnum]'  limit 1";
+    $result = mysql_query($sql);
+    $row = mysql_fetch_array($result);
+    if($row == "")   
+    {
+        $sql = "INSERT INTO logquncount (qunnum, study) VALUES ('$_REQUEST[qunnum]', 1)";
+        mysql_query($sql);
+    }
+    else
+    {
+        $temp = $row[study] + 1;
+        $sql = "UPDATE logquncount set study = $temp WHERE qunnum = '$_REQUEST[qunnum]'";
+        mysql_query($sql);
+    }
 }
 //如果提交QQ号在白名单，自动通过审核
 if($qqconf == 1)
