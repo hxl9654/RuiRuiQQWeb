@@ -72,28 +72,30 @@ if($_REQUEST[superstudy]=="true")
     }
 }
 $WaittingFlag = 0;
+$aimsql = mysql_real_escape_string($_REQUEST[aim]);
+$sourcesql = mysql_real_escape_string($_REQUEST[source]);
 //写入回复语句并获取编号
-$sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]'  limit 1";
+$sql = "SELECT * FROM data WHERE data = '$aimsql'  limit 1";
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row == "")
 {
-    $sql = "INSERT INTO data (data) VALUES ('$_REQUEST[aim]')";
+    $sql = "INSERT INTO data (data) VALUES ('$aimsql')";
     if (!mysql_query($sql, $con))
     {
         mysql_close($con);
         die('Error: ' . mysql_error());
     }
-    $sql = "SELECT * FROM data WHERE data = '$_REQUEST[aim]'  limit 1";
+    $sql = "SELECT * FROM data WHERE data = '$aimsql'  limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);   
 }
 $aimno = _rowget('no', $row);
 if($OCSServer!="NONE")
-    $connect->set('SmartQQRobotData1_'.$aimno,$_REQUEST[aim],0);
+    $connect->set('SmartQQRobotData2_'.$aimno,$aimsql,0);
 //寻找是否存在原语句
 $no = -1;
-$sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]'  limit 1";
+$sql = "SELECT * FROM talk WHERE source = '$sourcesql'  limit 1";
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result);
 if($row != "")
@@ -130,8 +132,7 @@ if($row != "")
         //向数据库添加数据
         $sql = "update talk set aim = '$aim,$aimno' where no = $no";
         if($OCSServer!="NONE")
-            $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aim.','.$aimno,0);
-
+            $connect->set('SmartQQRobotTalk2_'.$sourcesql,$aim.','.$aimno,0);
         if (!mysql_query($sql, $con))
         {
             mysql_close($con);
@@ -141,9 +142,9 @@ if($row != "")
 }
 else
 {
-    $sql = "INSERT INTO talk (source, aim) VALUES ('$_REQUEST[source]', '$aimno')";
+    $sql = "INSERT INTO talk (source, aim) VALUES ('$sourcesql', '$aimno')";
     if($OCSServer!="NONE")
-        $connect->set('SmartQQRobotTalk1_'.$_REQUEST[source],$aimno,0);
+        $connect->set('SmartQQRobotTalk2_'.$sourcesql,$aimno,0);
     if (!mysql_query($sql, $con))
     {
         mysql_close($con);
@@ -153,13 +154,13 @@ else
 
 if($no == -1)
 {
-    $sql = "SELECT * FROM talk WHERE source = '$_REQUEST[source]' limit 1";
+    $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);   
     $no = $row['no'];
 }
 //写入日志
-$sql = "INSERT INTO log (source, aim, qqnum, sourceno, aimno) VALUES ('$_REQUEST[source]', '$_REQUEST[aim]', '$_REQUEST[qqnum]', '$no', '$aimno')";
+$sql = "INSERT INTO log (source, aim, qqnum, sourceno, aimno) VALUES ('$sourcesql', '$aimsql', '$_REQUEST[qqnum]', '$no', '$aimno')";
 if (!mysql_query($sql, $con))
 {
     mysql_close($con);
@@ -188,7 +189,7 @@ if($qqconf == 1)
     }
     $sql = "update talk set enable = '$enablestr' where no = $no";
     if($OCSServer!="NONE")
-        $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
+        $connect->set('SmartQQRobotTalk2Enable_'.$_REQUEST[sourceno],$enablestr,0);
     
     if (!mysql_query($sql, $con))
     {
