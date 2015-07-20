@@ -51,6 +51,9 @@ if($OCSServer!="NONE")
             $row = mysql_fetch_array($result);
             $SourceNo = _rowget('no', $row);
             $connect->set('SmartQQRobotTalk1SourceNo_'.$sourcesql,$SourceNo,0);
+            $test = $connect->get('SmartQQRobotTalk1SourceNo_'.$sourcesql);
+            if($SourceNo != $test)
+                $connect->set('SmartQQRobotTalk1SourceNo_'.$sourcesql,$SourceNo,0);
         }
        
         $enable = $connect->get('SmartQQRobotTalk1Enable_'.$SourceNo);
@@ -64,6 +67,9 @@ if($OCSServer!="NONE")
             }
             $enable = _rowget('enable', $row);
             $connect->set('SmartQQRobotTalk1Enable_'.$SourceNo,$enable,0);
+            $test = $connect->get('SmartQQRobotTalk1Enable_'.$SourceNo);
+            if($enable != $test)
+                $connect->set('SmartQQRobotTalk1Enable_'.$SourceNo,$enable,0);
         }
         
         $str = explode(",",$aim);
@@ -136,7 +142,12 @@ if($aim == "")
 
             $aimno = $str[$index];
             if($OCSServer!="NONE")
+            {
                 $connect->set('SmartQQRobotTalk1_'.$sourcesql,$aim,0);
+                $test = $connect->get('SmartQQRobotTalk1_'.$sourcesql);
+                if($aim != $test)
+                    $connect->set('SmartQQRobotTalk1_'.$sourcesql,$aim,0);
+            }
         }
         else 
         {
@@ -169,7 +180,12 @@ if($row != "")
 {
     $response = _rowget('data', $row); 
     if($OCSServer!="NONE")
+    {
         $connect->set('SmartQQRobotData1_'.$aimno,$response,0);
+        $test = $connect->get('SmartQQRobotData1_'.$aimno);
+        if($response != $test)
+            $connect->set('SmartQQRobotData1_'.$aimno,$response,0);
+    }
     mysql_close($con);
     die($response);
 }
