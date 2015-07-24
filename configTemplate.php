@@ -25,7 +25,9 @@ if (!defined('SMARTQQ_CONFIG'))
     define("DBServer", "Your DataBase Server");
     define("DBName", "Your DataBase Name");
     define("DBUser", "Your DataBase UserName");
-    define("DBPasswordd", "Your DataBase UserPssword");
+    define("DBPassword", "Your DataBase UserPssword");
+    define("DBPowerUser", "Your DataBase UserName With Delete Permession");
+    define("DBPowerPassword", "Your DataBase UserPssword With Delete Permession");  
     define("WeatherAPIID", "Your Weather API ID");
     define("WeatherAPIKey", "Your Weather API Key");
     $AdminPass="Set Your AdminDataPassword 1";
