@@ -74,6 +74,7 @@ if($_REQUEST[superstudy]=="true")
 $WaittingFlag = 0;
 $aimsql = mysql_real_escape_string($_REQUEST[aim]);
 $sourcesql = mysql_real_escape_string($_REQUEST[source]);
+$sourceunsql = $_REQUEST[source];
 //写入回复语句并获取编号
 $sql = "SELECT * FROM data WHERE data = '$aimsql'  limit 1";
 $result = mysql_query($sql);
@@ -94,9 +95,6 @@ $aimno = _rowget('no', $row);
 if($OCSServer!="NONE")
 {
     $connect->set('SmartQQRobotData1_'.$aimno,_rowget('data', $row),0);
-    $test = $connect->get('SmartQQRobotData1_'.$aimno);
-    if($aimsql != $test)
-        $connect->set('SmartQQRobotData1_'.$aimno,_rowget('data', $row),0);
 }
 //寻找是否存在原语句
 $no = -1;
@@ -138,10 +136,7 @@ if($row != "")
         $sql = "update talk set aim = '$aim,$aimno' where no = $no";
         if($OCSServer!="NONE")
         {
-            $connect->set('SmartQQRobotTalk1_'.$sourcesql,$aim.','.$aimno,0);
-            $test = $connect->get('SmartQQRobotTalk1_'.$sourcesql);
-            if($aim.','.$aimno != $test)
-                $connect->set('SmartQQRobotTalk1_'.$sourcesql,$aim.','.$aimno,0);
+            $connect->set('SmartQQRobotTalk1_'.$sourceunsql,$aim.','.$aimno,0);
         }
         if (!mysql_query($sql, $con))
         {
@@ -155,10 +150,7 @@ else
     $sql = "INSERT INTO talk (source, aim) VALUES ('$sourcesql', '$aimno')";
     if($OCSServer!="NONE")
     {
-        $connect->set('SmartQQRobotTalk1_'.$sourcesql,$aimno,0);
-        $test = $connect->get('SmartQQRobotTalk1_'.$sourcesql);
-        if($aimno != $test)
-            $connect->set('SmartQQRobotTalk1_'.$sourcesql,$aimno,0);
+        $connect->set('SmartQQRobotTalk1_'.$sourceunsql,$aimno,0);
     }
     if (!mysql_query($sql, $con))
     {
@@ -239,9 +231,6 @@ if($qqconf == 1)
     if($OCSServer!="NONE")
     {
         $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
-        $test = $connect->get('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno]);
-        if($enablestr != $test)
-            $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
     }
     
     if (!mysql_query($sql, $con))

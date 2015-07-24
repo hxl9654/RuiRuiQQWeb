@@ -33,29 +33,26 @@ require 'database.php';
 $flag = 0;
 $flag1 = 0;
 $sourcesql = mysql_real_escape_string($_REQUEST[source]);
+$sourceunsql = $_REQUEST[source];
 //连接OCS缓存
 if($OCSServer!="NONE")
 {
     $connect = new Memcache; //声明一个新的memcached链接
     $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
     
-    $aim = $connect->get('SmartQQRobotTalk1_'.$sourcesql);
+    $aim = $connect->get('SmartQQRobotTalk1_'.$sourceunsql);
 
     if($aim != "")
     {
-        $SourceNo = $connect->get('SmartQQRobotTalk1SourceNo_'.$sourcesql);        
+        $SourceNo = $connect->get('SmartQQRobotTalk1SourceNo_'.$sourceunsql);        
         if($SourceNo == "")
         {
             $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
             $result = mysql_query($sql);
             $row = mysql_fetch_array($result);
             $SourceNo = _rowget('no', $row);
-            $connect->set('SmartQQRobotTalk1SourceNo_'.$sourcesql,$SourceNo,0);
-            $test = $connect->get('SmartQQRobotTalk1SourceNo_'.$sourcesql);
-            if($SourceNo != $test)
-                $connect->set('SmartQQRobotTalk1SourceNo_'.$sourcesql,$SourceNo,0);
+            $connect->set('SmartQQRobotTalk1SourceNo_'.$sourceunsql,$SourceNo,0);
         }
-       
         $enable = $connect->get('SmartQQRobotTalk1Enable_'.$SourceNo);
         if($enable == "")
         {
@@ -67,9 +64,6 @@ if($OCSServer!="NONE")
             }
             $enable = _rowget('enable', $row);
             $connect->set('SmartQQRobotTalk1Enable_'.$SourceNo,$enable,0);
-            $test = $connect->get('SmartQQRobotTalk1Enable_'.$SourceNo);
-            if($enable != $test)
-                $connect->set('SmartQQRobotTalk1Enable_'.$SourceNo,$enable,0);
         }
         
         $str = explode(",",$aim);
@@ -79,8 +73,6 @@ if($OCSServer!="NONE")
         {
             if($enable1[$i] == 1 || $enable1[$i] == 3)
                 $flag = 1;
-            if($enable1[$i] != 2)
-                $flag1 = 1;
         }
         if($flag == 1)
         {
@@ -128,8 +120,6 @@ if($aim == "")
         {
             if($enable1[$i] == 1 || $enable1[$i] == 3)
                 $flag = 1;
-            if($enable1[$i] != 2)
-                $flag1 = 1;
         }
         if($flag == 1)
         {
@@ -143,10 +133,7 @@ if($aim == "")
             $aimno = $str[$index];
             if($OCSServer!="NONE")
             {
-                $connect->set('SmartQQRobotTalk1_'.$sourcesql,$aim,0);
-                $test = $connect->get('SmartQQRobotTalk1_'.$sourcesql);
-                if($aim != $test)
-                    $connect->set('SmartQQRobotTalk1_'.$sourcesql,$aim,0);
+                $connect->set('SmartQQRobotTalk1_'.$sourceunsql,$aim,0);
             }
         }
         else 
@@ -163,15 +150,6 @@ if($aim == "")
         die('None1');
     }
 }
-$str = explode(",",$aim);
-$aimno = $str[rand(0,count($str)-1)];
-if($OCSServer!="NONE")
-    $result =$connect->get('SmartQQRobotData1_'.$aimno);
-if($result != "")
-{
-    mysql_close($con);
-    die($result);
-}
 //从回复数据库中读取语句
 $sql = "SELECT * FROM data WHERE no = '$aimno' limit 1";
 $result = mysql_query($sql);
@@ -182,9 +160,6 @@ if($row != "")
     if($OCSServer!="NONE")
     {
         $connect->set('SmartQQRobotData1_'.$aimno,$response,0);
-        $test = $connect->get('SmartQQRobotData1_'.$aimno);
-        if($response != $test)
-            $connect->set('SmartQQRobotData1_'.$aimno,$response,0);
     }
     mysql_close($con);
     die($response);
