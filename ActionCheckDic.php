@@ -102,6 +102,13 @@ else if($_REQUEST['action']=="disallow")
 }
 else if($_REQUEST['action']=="deletesource")
 {
+    mysql_close($con);
+    $con = mysql_connect(DBServer, DBPowerUser, DBPowerPassword);
+    if (!$con)
+        die('Could not connect: ' . mysql_error());
+    mysql_select_db(DBName, $con);
+    mysql_query("set character set 'utf8'");
+    
     $sql = "DELETE FROM talk WHERE no = $_REQUEST[sourceno]";
     $result = mysql_query($sql);
     if($OCSServer!="NONE")

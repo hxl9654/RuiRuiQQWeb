@@ -64,7 +64,7 @@ while($row = mysql_fetch_array($result))
 if($flag == 1)
 {
     echo "no :{$no}  <br> ".
-         "source: {$source} <br> ".
+         "source: ".str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($source, FILTER_SANITIZE_SPECIAL_CHARS))." <br> ".
          "aim: {$aim1} <br> ".
          "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=deletesource&sourceno=$no&source=$source' target='_blank'>删除整句</a> <br> ".
          "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=allallow&sourceno=$no' target='_blank'>全部通过</a> <br> ".
@@ -76,7 +76,8 @@ if($flag == 1)
             $sql = "SELECT * FROM data where no = $aim[$i] limit 1";
             $result = mysql_query($sql);
             $row = mysql_fetch_array($result);
-            echo "data :{$row['data']}";
+            $data = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($row['data'], FILTER_SANITIZE_SPECIAL_CHARS));
+            echo "data :{$data}";
             echo "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=allow&sourceno=$no&aimno=$i' target='_blank'>通过</a>";
             echo "&nbsp;&nbsp;";
             echo "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=disallow&sourceno=$no&aimno=$i' target='_blank'>屏蔽</a>";

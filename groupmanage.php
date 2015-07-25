@@ -85,7 +85,7 @@ else if($_REQUEST['action']=="get")
     else
     {
         echo "{";
-        echo "\"gno\":\"$_REQUEST[gno]\",";
+        echo "\"gno\":\"".str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($_REQUEST[gno], FILTER_SANITIZE_SPECIAL_CHARS))."\",";
         echo "\"statu\":\"fail\",";
         echo "\"error\":\"nodata\"";
         echo "}";   
@@ -94,7 +94,7 @@ else if($_REQUEST['action']=="get")
 else
 {
     echo "{";
-    echo "\"gno\":\"$_REQUEST[gno]\",";
+    echo "\"gno\":\"".str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($_REQUEST[gno], FILTER_SANITIZE_SPECIAL_CHARS))."\",";
     echo "\"statu\":\"fail\",";
     echo "\"error\":\"notsupport\"";
     echo "}"; 
