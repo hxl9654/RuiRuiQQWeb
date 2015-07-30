@@ -16,7 +16,7 @@
 // * @copyright  Copyright (c) 2015 Xianglong He. (http://tec.hxlxz.com)
 // * @license    http://www.gnu.org/licenses/     GPL v3
 // * @version    1.0
-// * @discribe   系统配置文件
+// * @discribe   RuiRuiQQ系统配置文件样本
 ?>
 <?php
 if (!defined('SMARTQQ_CONFIG'))

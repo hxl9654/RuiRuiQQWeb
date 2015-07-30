@@ -16,7 +16,7 @@
 // * @copyright  Copyright (c) 2015 Xianglong He. (http://tec.hxlxz.com)
 // * @license    http://www.gnu.org/licenses/     GPL v3
 // * @version    1.0
-// * @discribe   SmartQQ语库添加请求审核
+// * @discribe   RuiRuiQQ语库添加请求审核
 ?>
 <?php
 //屏蔽部分错误信息

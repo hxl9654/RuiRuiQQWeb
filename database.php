@@ -16,7 +16,7 @@
 // * @copyright  Copyright (c) 2015 Xianglong He. (http://tec.hxlxz.com)
 // * @license    http://www.gnu.org/licenses/     GPL v3
 // * @version    1.0
-// * @discribe   查寝系统数据库连接
+// * @discribe   RuiRuiQQ数据库连接
 //   太简单，不想注释
 ?>
 <?php
