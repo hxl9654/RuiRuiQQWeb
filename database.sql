@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2015 �?07 �?23 �?00:00
+-- 生成日期: 2015 �?07 �?31 �?00:57
 -- 服务器版本: 5.5.38
 -- PHP 版本: 5.6.1
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `data` (
   `data` text NOT NULL,
   `enable` smallint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`no`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1550 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1724 ;
 
 -- --------------------------------------------------------
 
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `groupmanage` (
   `enableCityInfo` text NOT NULL,
   `enableWiki` text NOT NULL,
   PRIMARY KEY (`no`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=32 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=87 ;
 
 -- --------------------------------------------------------
 
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `logqqcount` (
   `stock` int(11) NOT NULL DEFAULT '0',
   `cityinfo` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`no`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=883 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1686 ;
 
 -- --------------------------------------------------------
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `logquncount` (
   `stock` int(11) NOT NULL DEFAULT '0',
   `cityinfo` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`no`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=73 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=119 ;
 
 -- --------------------------------------------------------
 
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `logstudy` (
   `sourceno` text NOT NULL,
   `aimno` text NOT NULL,
   PRIMARY KEY (`no`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=905 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1138 ;
 
 -- --------------------------------------------------------
 
@@ -132,7 +132,24 @@ CREATE TABLE IF NOT EXISTS `loguse` (
   `p3` text NOT NULL,
   `p4` text NOT NULL,
   PRIMARY KEY (`no`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=15087 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=32468 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `pendingtalk`
+--
+
+CREATE TABLE IF NOT EXISTS `pendingtalk` (
+  `no` int(11) NOT NULL AUTO_INCREMENT,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `source` text NOT NULL,
+  `aim` text NOT NULL,
+  `qqnum` text NOT NULL,
+  `qunnum` text NOT NULL,
+  `statu` int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`no`)
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -147,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `qqinf` (
   `conf` int(11) NOT NULL DEFAULT '1',
   `super` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`no`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=22 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=23 ;
 
 -- --------------------------------------------------------
 
@@ -162,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `talk` (
   `aim` text NOT NULL,
   `enable` text NOT NULL,
   PRIMARY KEY (`no`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1328 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1461 ;
 
 -- --------------------------------------------------------
 
