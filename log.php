@@ -25,7 +25,8 @@ require 'config.php';
 
 if($_REQUEST['password'] != $AdminPass)
 {
-    exit("Wrong Password");
+    //exit("Wrong Password");
+    die();
 }
 //连接数据库
 require 'database.php';
