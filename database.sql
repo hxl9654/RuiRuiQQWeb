@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2015 �?07 �?31 �?01:11
+-- 生成日期: 2015 ��?07 ��?31 ��?01:11
 -- 服务器版本: 5.5.38
 -- PHP 版本: 5.6.1
 
@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `groupmanage` (
   `enableemoje` text NOT NULL,
   `enableCityInfo` text NOT NULL,
   `enableWiki` text NOT NULL,
+  `enableTranslate` text NOT NULL,
   PRIMARY KEY (`no`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=87 ;
 

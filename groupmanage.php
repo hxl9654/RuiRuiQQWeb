@@ -77,6 +77,7 @@ else if($_REQUEST['action']=="get")
         echo "\"enableemoje\":\"".$row['enableemoje']."\",";
         echo "\"enableCityInfo\":\"".$row['enableCityInfo']."\",";
         echo "\"enableWiki\":\"".$row['enableWiki']."\",";
+        echo "\"enableTranslate\":\"".$row['enableTranslate']."\",";
         echo "\"gno\":\"".$row['gno']."\",";
         echo "\"statu\":\"success\"";
         echo "}";
