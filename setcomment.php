@@ -25,6 +25,6 @@ if($_REQUEST['password'] != $AdminPass)
 $connect = new Memcache; //声明一个新的memcached链接
 $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
 $num = $connect->get('commentnum'.$_REQUEST['qunnum']);
-$connect->set('commentnum'.$_REQUEST['qunnum'],$num + 1,0);
-$connect->set('commentno'.$_REQUEST['qunnum'].'_'.($num + 1),$_REQUEST['dat'],0);
+$connect->set('commentnum'.$_REQUEST['qunnum'],$num + 1,0,86400);
+$connect->set('commentno'.$_REQUEST['qunnum'].'_'.($num + 1),$_REQUEST['dat'],0,86400);
 ?>
