@@ -20,7 +20,7 @@
 // * 本文件使用了腾讯公司提供的样例代码
 ?>
 <?php
-error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
+
 //define your token
 define("TOKEN", "KwYUS8EvoIYMPNGL4ChzMuCAo5vLDEc9");
 $wechatObj = new wechatCallbackapiTest();
@@ -45,11 +45,11 @@ class wechatCallbackapiTest
                     </xml>"; 
         require 'config.php';
         require 'database.php';
-        $fromUsername = mysql_real_escape_string($postObj->FromUserName);
-        $toUsername = mysql_real_escape_string($postObj->ToUserName);
-        $CreateTime = mysql_real_escape_string($postObj->CreateTime);
-        $Content = mysql_real_escape_string($postObj->Content);
-        $MsgId = mysql_real_escape_string($postObj->MsgId);
+        $fromUsername = $mysqli->real_escape_string($postObj->FromUserName);
+        $toUsername = $mysqli->real_escape_string($postObj->ToUserName);
+        $CreateTime = $mysqli->real_escape_string($postObj->CreateTime);
+        $Content = $mysqli->real_escape_string($postObj->Content);
+        $MsgId = $mysqli->real_escape_string($postObj->MsgId);
         
         $connect = new Memcache; //声明一个新的memcached链接
         $connect->addServer($OCSServer, 11211);//添加实例地址  端口号   
@@ -64,7 +64,7 @@ class wechatCallbackapiTest
 
         //$sql = "INSERT INTO wechat (ToUserName, FromUserName, CreateTime, MsgType, Content, MsgId) VALUES ('$toUsername', '$fromUsername', '$postObj->CreateTime', '$postObj->MsgType', '$postObj->Content', '$postObj->MsgId')";
         $sql = "INSERT INTO wechat (FromUserName, CreateTime, Content, MsgId) VALUES ('$fromUsername', '$CreateTime', '$Content', '$MsgId')";
-        mysql_query($sql, $con);
+        $mysqli->query($sql);
         
         $i = 50;
         while($i > 0)

@@ -25,20 +25,19 @@ require 'config.php';
 
 //连接数据库
 require 'database.php';
-mysql_query("set character set 'utf8'");
 
 //过滤恶意字符
-$aimsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var(mysql_real_escape_string($_REQUEST['aim']), FILTER_SANITIZE_SPECIAL_CHARS));
-$sourcesql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var(mysql_real_escape_string($_REQUEST['source']), FILTER_SANITIZE_SPECIAL_CHARS));
-$qqnumsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var(mysql_real_escape_string($_REQUEST['qqnum']), FILTER_SANITIZE_SPECIAL_CHARS));
-$qunnumsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var(mysql_real_escape_string($_REQUEST['qunnum']), FILTER_SANITIZE_SPECIAL_CHARS));
+$aimsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($mysqli->real_escape_string($_REQUEST['aim']), FILTER_SANITIZE_SPECIAL_CHARS));
+$sourcesql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($mysqli->real_escape_string($_REQUEST['source']), FILTER_SANITIZE_SPECIAL_CHARS));
+$qqnumsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($mysqli->real_escape_string($_REQUEST['qqnum']), FILTER_SANITIZE_SPECIAL_CHARS));
+$qunnumsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($mysqli->real_escape_string($_REQUEST['qunnum']), FILTER_SANITIZE_SPECIAL_CHARS));
 
 //写入
 $sql = "INSERT INTO pendingtalk (aim, source, qqnum, qunnum) VALUES ('$aimsql','$sourcesql','$qqnumsql','$qunnumsql')";
-if (!mysql_query($sql, $con))
+if (!$mysqli->query($sql))
 {
-    mysql_close($con);
-    die('Error: ' . mysql_error());
+    $mysqli->close();
+    die('Error: ' . $mysqli->error);
 }
 else 
     die('pending');

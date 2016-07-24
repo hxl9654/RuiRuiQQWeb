@@ -25,18 +25,17 @@ require 'config.php';
 
 //连接数据库
 require 'database.php';
-mysql_query("set character set 'utf8'");
 
 //过滤恶意字符
-$adminqqsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var(mysql_real_escape_string($_REQUEST['adminqq']), FILTER_SANITIZE_SPECIAL_CHARS));
-$qqsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var(mysql_real_escape_string($_REQUEST['qq']), FILTER_SANITIZE_SPECIAL_CHARS));
+$adminqqsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($mysqli->real_escape_string($_REQUEST['adminqq']), FILTER_SANITIZE_SPECIAL_CHARS));
+$qqsql = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($mysqli->real_escape_string($_REQUEST['qq']), FILTER_SANITIZE_SPECIAL_CHARS));
 
 //写入
 $sql = "INSERT INTO loginfreport (qq, adminqq) VALUES ('$qqsql','$adminqqsql')";
-if (!mysql_query($sql, $con))
+if (!$mysqli->query($sql))
 {
-    mysql_close($con);
-    die('Error: ' . mysql_error());
+    $mysqli->close();
+    die('Error: ' . $mysqli->error);
 }
 else 
     die('ok');

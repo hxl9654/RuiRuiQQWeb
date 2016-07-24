@@ -32,8 +32,8 @@ if($_REQUEST['password'] != $AdminPass)
 require 'database.php';
 
 $sql = "SELECT * FROM pendingtalk WHERE statu = 0 limit 1";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
+$result = $mysqli->query($sql);
+$row = mysqli_fetch_array($result);
 if($row == "")   
 {   
     die('没有待审核的词条');
@@ -47,7 +47,7 @@ else
     $qunnum = $row['qunnum'];
     
     $sql = "UPDATE pendingtalk set statu = 1 WHERE no = '$no'";
-    mysql_query($sql);
+    $mysqli->query($sql);
     
     echo "no :$no  <br> ".
          "source: $source <br> ".

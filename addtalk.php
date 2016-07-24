@@ -42,17 +42,16 @@ if($OCSServer!="NONE")
 //连接数据库
 require 'database.php';
 
-mysql_query("set character set 'utf8'");
 //获取提交的QQ号的信息
 $sql = "SELECT * FROM qqinf WHERE qq = '$_REQUEST[qqnum]' limit 1";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
+$result = $mysqli->query($sql);
+$row = mysqli_fetch_array($result);
 if($row != "")
 {
     $qqconf = $row['conf'];   
     if($qqconf == 2)
     {
-        mysql_close($con);
+        $mysqli->close();
         exit("IDDisabled");
     }
 }
@@ -61,35 +60,35 @@ if($_REQUEST[superstudy]=="true")
 {
     if($row == "")
     {
-        mysql_close($con);
+        $mysqli->close();
         exit("NotSuper");
     }  
     $qqsuper = $row['super'];
     if($qqsuper != 1)
     {
-        mysql_close($con);
+        $mysqli->close();
         exit("NotSuper");
     }
 }
 $WaittingFlag = 0;
-$aimsql = mysql_real_escape_string($_REQUEST[aim]);
-$sourcesql = mysql_real_escape_string($_REQUEST[source]);
+$aimsql = $mysqli->real_escape_string($_REQUEST[aim]);
+$sourcesql = $mysqli->real_escape_string($_REQUEST[source]);
 $sourceunsql = $_REQUEST[source];
 //写入回复语句并获取编号
 $sql = "SELECT * FROM data WHERE data = '$aimsql'  limit 1";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
+$result = $mysqli->query($sql);
+$row = mysqli_fetch_array($result);
 if($row == "")
 {
     $sql = "INSERT INTO data (data) VALUES ('$aimsql')";
-    if (!mysql_query($sql, $con))
+    if (!$mysqli->query($sql))
     {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
+        $mysqli->close();
+        die('Error: ' . $mysqli->error);
     }
     $sql = "SELECT * FROM data WHERE data = '$aimsql'  limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);   
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);   
 }
 $aimno = _rowget('no', $row);
 if($OCSServer!="NONE")
@@ -99,8 +98,8 @@ if($OCSServer!="NONE")
 //寻找是否存在原语句
 $no = -1;
 $sql = "SELECT * FROM talk WHERE source = '$sourcesql'  limit 1";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
+$result = $mysqli->query($sql);
+$row = mysqli_fetch_array($result);
 if($row != "")
 {
     $aim = _rowget('aim', $row);
@@ -115,12 +114,12 @@ if($row != "")
             
             if($enable[$i] == 1 || $enable[$i] == 3)
             {
-                mysql_close($con);
+                $mysqli->close();
                 die('Already');
             }
             else if($enable[$i] == 2)
             {
-                mysql_close($con);
+                $mysqli->close();
                 die('Forbidden');
             }
             else 
@@ -138,80 +137,82 @@ if($row != "")
         {
             $connect->set('SmartQQRobotTalk1_'.$sourceunsql,$aim.','.$aimno,0);
         }
-        if (!mysql_query($sql, $con))
+        if (!$mysqli->query($sql))
         {
-            mysql_close($con);
-            die('Error: ' . mysql_error());
+            $mysqli->close();
+            die('Error: ' . $mysqli->error);
         }
     }
 }
 else
 {
-    $sql = "INSERT INTO talk (source, aim) VALUES ('$sourcesql', '$aimno')";
+    $sql = "INSERT INTO talk (source, aim, enable) VALUES ('$sourcesql', '$aimno', '0')";
     if($OCSServer!="NONE")
     {
         $connect->set('SmartQQRobotTalk1_'.$sourceunsql,$aimno,0);
     }
-    if (!mysql_query($sql, $con))
+    $result = $mysqli->query($sql);
+    echo $mysqli->error;
+    if (!$result)
     {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
+        $mysqli->close();
+        die('Error: ' . $mysqli->error);
     }
 }
 
 if($no == -1)
 {
     $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);   
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);   
     $no = $row['no'];
 }
 //写入日志
 $sql = "INSERT INTO logstudy (source, aim, qqnum, qunnum, sourceno, aimno) VALUES ('$sourcesql', '$aimsql', '$_REQUEST[qqnum]', '$_REQUEST[qunnum]', '$no', '$aimno')";
-if (!mysql_query($sql, $con))
+if (!$mysqli->query($sql))
 {
-    mysql_close($con);
-    die('Error: ' . mysql_error());
+    $mysqli->close();
+    die('Error: ' . $mysqli->error);
 }
 //按QQ号做记录
 $sql = "SELECT * FROM logqqcount WHERE qqnum = '$_REQUEST[qqnum]'  limit 1";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
+$result = $mysqli->query($sql);
+$row = mysqli_fetch_array($result);
 if($row == "")   
 {   
     $sql = "INSERT INTO logqqcount (qqnum, study) VALUES ('$_REQUEST[qqnum]', 1)";
-    mysql_query($sql);
+    $mysqli->query($sql);
 }
 else
 {
     $temp = $row[study] + 1;
     $sql = "UPDATE logqqcount set study = $temp WHERE qqnum = '$_REQUEST[qqnum]'";
-    mysql_query($sql);
+    $mysqli->query($sql);
 }
 //按群号做记录
 if($_REQUEST[qunnum] != "NULL")
 {
     $sql = "SELECT * FROM logquncount WHERE qunnum = '$_REQUEST[qunnum]'  limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     if($row == "")   
     {
         $sql = "INSERT INTO logquncount (qunnum, study) VALUES ('$_REQUEST[qunnum]', 1)";
-        mysql_query($sql);
+        $mysqli->query($sql);
     }
     else
     {
         $temp = $row[study] + 1;
         $sql = "UPDATE logquncount set study = $temp WHERE qunnum = '$_REQUEST[qunnum]'";
-        mysql_query($sql);
+        $mysqli->query($sql);
     }
 }
 //如果提交QQ号在白名单，自动通过审核
 if($qqconf == 1)
 {
     $sql = "SELECT * FROM talk where no = $no ";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     $aim1 = explode(",",$row['aim']);
     $enable = explode(",",$row['enable']);
     
@@ -233,19 +234,19 @@ if($qqconf == 1)
         $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
     }
     
-    if (!mysql_query($sql, $con))
+    if (!$mysqli->query($sql))
     {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
+        $mysqli->close();
+        die('Error: ' . $mysqli->error);
     }
     else
     {
-        mysql_close($con);
+        $mysqli->close();
         die('Success');
     }
 }
     
-mysql_close($con);
+$mysqli->close();
 die('Waitting');
 
 ?>

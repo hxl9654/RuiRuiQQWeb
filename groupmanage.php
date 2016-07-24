@@ -33,7 +33,6 @@ require 'config.php';
 //连接数据库
 require 'database.php';
 
-mysql_query("set character set 'utf8'");
 if($_REQUEST['action']=="set")
 {
     if($_REQUEST['password'] != $AdminPass)
@@ -41,19 +40,19 @@ if($_REQUEST['action']=="set")
         exit("Wrong Password");
     }
     $sql = "SELECT * FROM groupmanage WHERE gno = '$_REQUEST[gno]'  limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     if($row == "")   
     {   
         $sql = "INSERT INTO groupmanage (gno, $_REQUEST[option]) VALUES ('$_REQUEST[gno]', '$_REQUEST[value]')";
-        mysql_query($sql);
-        mysql_close($con);
+        $mysqli->query($sql);
+        $mysqli->close();
     }
     else
     {
         $sql = "UPDATE groupmanage set $_REQUEST[option] = '$_REQUEST[value]' WHERE gno = '$_REQUEST[gno]'";
-        mysql_query($sql);
-        mysql_close($con);
+        $mysqli->query($sql);
+        $mysqli->close();
     }
     echo "{";
     echo "\"statu\":\"success\"";
@@ -61,9 +60,9 @@ if($_REQUEST['action']=="set")
 }
 else if($_REQUEST['action']=="get")
 {
-    $sql = "SELECT * FROM groupmanage WHERE gno = '".mysql_real_escape_string($_REQUEST[gno])."'  limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $sql = "SELECT * FROM groupmanage WHERE gno = '".$mysqli->real_escape_string($_REQUEST[gno])."'  limit 1";
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     if($row != "")   
     {
         echo "{";
@@ -81,7 +80,7 @@ else if($_REQUEST['action']=="get")
         echo "\"gno\":\"".$row['gno']."\",";
         echo "\"statu\":\"success\"";
         echo "}";
-        mysql_close($con);
+        $mysqli->close();
     }
     else
     {

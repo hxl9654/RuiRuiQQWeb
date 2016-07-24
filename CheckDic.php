@@ -36,14 +36,14 @@ if($_REQUEST['password'] != $AdminPass)
 //连接数据库
 require 'database.php';
 
-mysql_query("set character set 'utf8'");
+$mysqli->query("set character set 'utf8'");
 
 //读取语录数据库
 
 $sql = "SELECT * FROM talk";
-$result = mysql_query($sql);
+$result = $mysqli->query($sql);
 $flag = 0;
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result))
 {
     
     $no = $row['no'];
@@ -74,8 +74,8 @@ if($flag == 1)
         if(count($enable) <= i || $enable[$i] == 0 || $enable[$i] == 3 || $enable[$i] == "")
         {
             $sql = "SELECT * FROM data where no = $aim[$i] limit 1";
-            $result = mysql_query($sql);
-            $row = mysql_fetch_array($result);
+            $result = $mysqli->query($sql);
+            $row = mysqli_fetch_array($result);
             $data = str_ireplace("script","&#115;&#99;&#114;&#105;&#112;&#116;",filter_var($row['data'], FILTER_SANITIZE_SPECIAL_CHARS));
             echo "data :{$data}";
             echo "<a href='ActionCheckDic.php?password=$_REQUEST[password]&action=allow&sourceno=$no&aimno=$i' target='_blank'>通过</a>";

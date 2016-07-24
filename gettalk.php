@@ -32,7 +32,7 @@ require 'config.php';
 require 'database.php';
 $flag = 0;
 $flag1 = 0;
-$sourcesql = mysql_real_escape_string($_REQUEST[source]);
+$sourcesql = $mysqli->real_escape_string($_REQUEST[source]);
 $sourceunsql = $_REQUEST[source];
 //连接OCS缓存
 if($OCSServer!="NONE")
@@ -48,8 +48,8 @@ if($OCSServer!="NONE")
         if($SourceNo == "")
         {
             $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
-            $result = mysql_query($sql);
-            $row = mysql_fetch_array($result);
+            $result = $mysqli->query($sql);
+            $row = mysqli_fetch_array($result);
             $SourceNo = _rowget('no', $row);
             $connect->set('SmartQQRobotTalk1SourceNo_'.$sourceunsql,$SourceNo,0);
         }
@@ -59,8 +59,8 @@ if($OCSServer!="NONE")
             if($row == "")
             {
                 $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
-                $result = mysql_query($sql);
-                $row = mysql_fetch_array($result);
+                $result = $mysqli->query($sql);
+                $row = mysqli_fetch_array($result);
             }
             $enable = _rowget('enable', $row);
             $connect->set('SmartQQRobotTalk1Enable_'.$SourceNo,$enable,0);
@@ -87,7 +87,7 @@ if($OCSServer!="NONE")
         }
         else 
         {
-            mysql_close($con);
+            $mysqli->close();
             if($flag1 == 1)
                 die('None3');
             else die('None4');
@@ -109,8 +109,8 @@ $flag1 = 0;
 if($aim == "")
 {
     $sql = "SELECT * FROM talk WHERE source = '$sourcesql' limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     if($row != "")
     {
         $aim = _rowget('aim', $row);
@@ -138,7 +138,7 @@ if($aim == "")
         }
         else 
         {
-            mysql_close($con);
+            $mysqli->close();
             if($flag1 == 1)
                 die('None3');
             else die('None4');
@@ -146,14 +146,14 @@ if($aim == "")
     }
     else
     {
-        mysql_close($con);
+        $mysqli->close();
         die('None1');
     }
 }
 //从回复数据库中读取语句
 $sql = "SELECT * FROM data WHERE no = '$aimno' limit 1";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
+$result = $mysqli->query($sql);
+$row = mysqli_fetch_array($result);
 if($row != "")
 {
     $response = _rowget('data', $row); 
@@ -161,12 +161,12 @@ if($row != "")
     {
         $connect->set('SmartQQRobotData1_'.$aimno,$response,0);
     }
-    mysql_close($con);
+    $mysqli->close();
     die($response);
 }
 else
 {
-    mysql_close($con);
+    $mysqli->close();
     die('None2');
 }
 ?>

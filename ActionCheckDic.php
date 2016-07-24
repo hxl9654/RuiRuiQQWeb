@@ -42,12 +42,11 @@ if($OCSServer!="NONE")
 //连接数据库
 require 'database.php';
 
-mysql_query("set character set 'utf8'");
 if($_REQUEST['action']=="allow")
 {
     $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     $enable = explode(",",$row['enable']);
     $enable[$_REQUEST['aimno']]=1;
     $aim = explode(",",$row['aim']);
@@ -65,17 +64,17 @@ if($_REQUEST['action']=="allow")
     if($OCSServer!="NONE")
         $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
     
-    if (!mysql_query($sql, $con))
+    if (!$mysqli->query($sql))
     {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
+        $mysqli->close();
+        die('Error: ' . $mysqli->error);
     }
 }
 else if($_REQUEST['action']=="disallow")
 {
     $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     $enable = explode(",",$row['enable']);
     $enable[$_REQUEST['aimno']]=2;    
     $aim = explode(",",$row['aim']);
@@ -94,31 +93,30 @@ else if($_REQUEST['action']=="disallow")
     if($OCSServer!="NONE")
         $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
     
-    if (!mysql_query($sql, $con))
+    if (!$mysqli->query($sql))
     {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
+        $mysqli->close();
+        die('Error: ' . $mysqli->error);
     }
 }
 else if($_REQUEST['action']=="deletesource")
 {
-    mysql_close($con);
-    $con = mysql_connect(DBServer, DBPowerUser, DBPowerPassword);
-    if (!$con)
-        die('Could not connect: ' . mysql_error());
-    mysql_select_db(DBName, $con);
-    mysql_query("set character set 'utf8'");
+    $mysqli->close();
+    $mysqli = new mysqli(DBServer, DBPowerUser, DBPowerPassword, DBName);
+    if (!$mysqli)
+        die('Could not connect: ' . $mysqli->error);
+    $mysqli->query("set character set 'utf8'");
     
     $sql = "DELETE FROM talk WHERE no = $_REQUEST[sourceno]";
-    $result = mysql_query($sql);
+    $result = $mysqli->query($sql);
     if($OCSServer!="NONE")
         $connect->delete('SmartQQRobotTalk1_'.$_REQUEST[source]);
 }
 else if($_REQUEST['action']=="allallow")
 {
     $sql = "SELECT * FROM talk where no = $_REQUEST[sourceno] limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     $enable = explode(",",$row['enable']);
     $aim = explode(",",$row['aim']);
     
@@ -134,10 +132,10 @@ else if($_REQUEST['action']=="allallow")
     if($OCSServer!="NONE")
         $connect->set('SmartQQRobotTalk1Enable_'.$_REQUEST[sourceno],$enablestr,0);
     
-    if (!mysql_query($sql, $con))
+    if (!$mysqli->query($sql))
     {
-        mysql_close($con);
-        die('Error: ' . mysql_error());
+        $mysqli->close();
+        die('Error: ' . $mysqli->error);
     }
 }
 else if($_REQUEST['action']=="change")

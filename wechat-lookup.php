@@ -25,14 +25,14 @@ if($_REQUEST[password] != $AdminPass)
 require 'database.php';
 
 $sql = "SELECT * from wechat where response = ''";
-$result = mysql_query($sql, $con);
-$row = mysql_fetch_array($result);
+$result = $mysqli->query($sql);
+$row = mysqli_fetch_array($result);
 while($row)
 {
     echo $row[MsgId]."★".$row[CreateTime]."★".$row[FromUserName]."★".$row[Content];
-    $row = mysql_fetch_array($result);
+    $row = mysqli_fetch_array($result);
     if($row)
         echo "▲";
 }
-mysql_close($con);
+$mysqli->close();
 ?>

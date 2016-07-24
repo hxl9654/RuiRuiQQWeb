@@ -29,9 +29,9 @@ $connect->addServer($OCSServer, 11211);//添加实例地址  端口号
 $connect->set('RuiRuiWechat_'.$_REQUEST['id'],$_REQUEST['res'],0);
 
 require 'database.php';
-$id = mysql_real_escape_string($_REQUEST[id]);
-$res = mysql_real_escape_string($_REQUEST[res]);
+$id = $mysqli->real_escape_string($_REQUEST[id]);
+$res = $mysqli->real_escape_string($_REQUEST[res]);
 $sql = "update wechat set response = '$res' where MsgId = '$id'";
-mysql_query($sql, $con);
-mysql_close($con);
+$mysqli->query($sql);
+$mysqli->close();
 ?>

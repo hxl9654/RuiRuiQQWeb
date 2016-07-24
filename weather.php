@@ -19,6 +19,7 @@
 // * @discribe   天气信息获取
 ?>
 <?php
+error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
 //解决变量未定义报错
 function _rowget($str,$row)
 {
@@ -46,9 +47,9 @@ else
     $flag = 1;
 if($areaid == '')
 {
-    $sql = "SELECT * FROM weathercityid WHERE city = '".mysql_real_escape_string($_REQUEST[city])."' limit 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result);
+    $sql = "SELECT * FROM weathercityid WHERE city = '".$mysqli->real_escape_string($_REQUEST[city])."' limit 1";
+    $result = $mysqli->query($sql);
+    $row = mysqli_fetch_array($result);
     $areaid = _rowget('id', $row);
     if($areaid == '')
     {
